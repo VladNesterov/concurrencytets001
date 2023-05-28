@@ -3,8 +3,9 @@ package com.concurrency.test1.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.cache.annotation.Cacheable;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -12,8 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Cacheable(cacheNames = "Balance", key = "id")
-public class Balance {
+public class Balance implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

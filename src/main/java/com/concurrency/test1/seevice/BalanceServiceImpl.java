@@ -2,15 +2,12 @@ package com.concurrency.test1.seevice;
 
 import com.concurrency.test1.entity.Balance;
 import com.concurrency.test1.repository.BalanceRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.constructs.blocking.BlockingCache;
-import net.sf.ehcache.hibernate.management.impl.EhcacheHibernate;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.NotCompliantMBeanException;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -18,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BalanceServiceImpl implements BalanceService {
 
     private final BalanceRepository balanceRepository;
-    private final Ehcache blockingCache;
+    private final CacheManager blockingCache;
 
     private ConcurrentHashMap<Long, Long> aa = new ConcurrentHashMap<>();
 
@@ -29,12 +26,19 @@ public class BalanceServiceImpl implements BalanceService {
 
     @Override
     @Transactional
-    public void changeBalance(Long id, Long amount) {
-        balanceRepository.updateAmountById(id, amount);
+    synchronized public void changeBalance(Long id, Long amount) {
+        if (balanceRepository.getReferenceById(id) == null) {
+            throw new EntityNotFoundException();
+        }
+        Balance balance = new Balance();
+        balance.setAmount(amount);
+        balance.setId(id);
+        balanceRepository.save(balance);
     }
 
+
     @Override
-    public Long createBalance(Long amount) {
+    synchronized public Long createBalance(Long amount) {
         Balance a = new Balance();
         a.setAmount(amount);
         return balanceRepository.save(a).getId();
