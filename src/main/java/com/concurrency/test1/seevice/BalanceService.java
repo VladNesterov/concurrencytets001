@@ -1,18 +1,18 @@
 package com.concurrency.test1.seevice;
 
-import java.util.Optional;
+import javax.management.NotCompliantMBeanException;
 
 /**
  * Интерфейс сервиса для работы с банковским счётом содержит два метода
  **/
 interface BalanceService {
     /**
-     *  Получение баланса
+     * Получение баланса
      *
-     *  @param id идентификатор банковского счёта
-     *  @return сумма денег на банковском счёте
+     * @param id идентификатор банковского счёта
+     * @return сумма денег на банковском счёте
      */
-    Optional<Long> getBalance(Long id);
+    Long getBalance(Long id) throws NotCompliantMBeanException;
 
     /**
      *  Изменение баланса на определённое значение

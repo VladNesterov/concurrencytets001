@@ -3,6 +3,7 @@ package com.concurrency.test1.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.Cacheable;
 
 
 @Entity
@@ -11,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Cacheable(cacheNames = "Balance", key = "id")
 public class Balance {
 
     @Id

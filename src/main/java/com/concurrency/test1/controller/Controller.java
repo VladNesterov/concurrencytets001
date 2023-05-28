@@ -11,11 +11,9 @@ public class Controller {
 
    private final BalanceServiceImpl balanceService;
 
-
     @PutMapping()
     public Long createBalance(@RequestParam Long amount) {
         return balanceService.createBalance(amount);
-
     }
 
     @PostMapping()
@@ -25,7 +23,7 @@ public class Controller {
 
     @GetMapping("getByIds")
     public Long getBalance(@RequestParam Long id) {
-       return balanceService.getBalance(id).get();
+       return balanceService.getBalance(id);
     }
 
 }
